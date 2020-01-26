@@ -1,14 +1,8 @@
 """
 Load module to filter data on fly
 """
-from __future__ import print_function
-import os
-import sys
 import pandas as pd
-import numpy as np
-
-
-class Load(object):
+class Load():
     """
     Load class is used for exclusive dataframe filtering
     which takes `df` a csv file and convert into dataframe
@@ -20,7 +14,7 @@ class Load(object):
                         68.40751031,Injuries,Number,Assault,Validated,Whole 
                         pop,All ages,FatalW_A11,2001-03,Moving average,60,10,
                         20,30,33,31,12,51.23477459,68.76522541,Injuries,
-                        Number,Assault,Validated,Whole pop,All ages,Fatale 
+                        Number,Assault,Validated,Whole pop,All ages,Fatale
                         50, 50, 60,pop,All ages,Fatal"""
 
 
@@ -46,7 +40,13 @@ class Load(object):
             >> [1,2,3,4,5,6]
 
         """
-        # complete code here
+        res = []
+        for t in self.data.split(","):
+            try:
+                res.append(float(t))
+            except ValueError:
+                pass
+        return res
 
 
     def sum_all_numbers(self):
@@ -66,8 +66,8 @@ class Load(object):
 
 
         """
-        # complete code here
 
+        print(sum(df.pick_numbers()))
 
     def extract_vowels(self):
         """
@@ -81,7 +81,11 @@ class Load(object):
             >> df.extract_vowels()
             >> ['A', 'E', 'I', 'O']
         """
-
+        def Check_Vow(data, vowels):
+            final = [each for each in data if each in vowels]
+            print(final)
+        vowels = "AeEeIiOoUu"
+        Check_Vow(self.data, vowels)
 
     def pick_odd_numbers(self):
         """
@@ -97,8 +101,9 @@ class Load(object):
             >> [1, 3, 5]
 
         """
-        # complete code here
-
+        for num in df.pick_numbers():
+            if round(num) % 2 != 0:
+                print(num)
 
     def get_mean(self):
         """
@@ -113,7 +118,8 @@ class Load(object):
             >> df.get_mean()
             >> 50
         """
-        # complete code here
+        res = df.pick_numbers()
+        print(sum(res)/len(res))
 
 
     def get_all_categorical(self):
@@ -130,8 +136,9 @@ class Load(object):
             >> df.get_all_categorical()
             >> ['Series_reference', 'Type']
         """
-        # complete code here
-
+        cols = self.df.columns
+        num_cols = self.df._get_numeric_data().columns
+        print(list(set(cols) - set(num_cols)))
 
 
     def get_all_continuous(self):
@@ -148,7 +155,7 @@ class Load(object):
             >> df.get_all_continuous()
             >> ['Lower_CI', 'Upper_CI', 'Units']
         """
-        # complete code here
+        print(self.df._get_numeric_data().columns)
 
 
 
@@ -167,10 +174,17 @@ class Load(object):
             >> df.addition(10, 20)
             >> 30
         """
-        # complete code here
+        print(x+y)
 
 
 
 if __name__ == '__main__':
     # instantiate the object
     df = Load('data.csv')
+    df.sum_all_numbers()
+    df.get_mean()
+    df.extract_vowels()
+    df.pick_odd_numbers()
+    df.get_all_categorical()
+    df.get_all_continuous()
+    df.addition(10, 20)
